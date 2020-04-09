@@ -1,4 +1,4 @@
-language: bash
+language: php
 sudo: required
 script:
   - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
@@ -7,5 +7,3 @@ deploy:
   skip_cleanup: true
   provider: script
   script: make push
-  # on:
-  #   branch: master
