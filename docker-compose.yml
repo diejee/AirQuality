@@ -1,0 +1,41 @@
+version: "3.4"
+
+services:
+  backend:
+    container_name: AirQualityDB
+    build:
+      context: ./backend/
+      target: dev_image
+    ports:
+      - 8000:80
+    environment:
+      APP_VERSION: DEVELOPMENT
+      DB_HOST: DB_HOST
+      DB_PORT: DB_PORT
+      DB_DATABASE: DB_DATABASE
+      DB_USERNAME: DB_USERNAME
+      DB_PASSWORD: DB_PASSWORD
+      APP_DEBUG: 'false'
+    volumes:
+      - ./backend/:/app
+    networks:
+      - internal
+
+  # database:
+  #   container_name: AirQualityBackend
+  #   image: mariadb:10.2.14
+  #   command: --innodb-flush-method=O_DSYNC --innodb-use-native-aio=0 --log_bin=ON
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_USER: jeroen
+  #     MYSQL_PASSWORD: example
+  #     MYSQL_DATABASE: sync
+  #   ports:
+  #     - 3306:3306
+  #   volumes:
+  #     - db-data:/var/lib/mysql
+  #   networks:
+  #     - internal
+
+networks:
+  internal:
