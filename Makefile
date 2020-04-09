@@ -1,5 +1,5 @@
-# Name of the repo
-REPO=diejee
+# Name of docker hub
+REPO=jeroenvo
 
 # Name of the image
 IMAGE=AirQuality
