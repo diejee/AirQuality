@@ -7,7 +7,7 @@ import {PageNotFoundComponent} from "../page-not-found/page-not-found.component"
 
 const appRoutes: Routes = [
   { path: 'room-list', component: RoomlistComponent },
-  { path: 'room-list/room/:id', component: RoomComponent },
+  { path: 'room/:id', component: RoomComponent },
   { path: '', redirectTo: '/room-list', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ]
