@@ -1,0 +1,11 @@
+language: php
+
+sudo: required
+script:
+  - make generateVersionTags
+  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - make build
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: make push

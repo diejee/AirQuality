@@ -1,0 +1,55 @@
+version: "3.4"
+
+services:
+  www:
+    image: ${DOCKER_REPO}/www:${VERSION_TAG}
+    build: ./entrypoint
+    ports:
+      - 80:80
+    environment:
+    ENTRYPOINT_HOSTNAME: localhost
+    FRONTEND_ENDPOINT: http://frontend
+    LISTEN_PORT: 80
+    DISABLE_SSL_HASH: '#'
+    BACKEND_HOST: backend
+    #  FRONTEND_HOST: frontend
+    networks:
+      - internal
+
+  backend:
+    image: ${DOCKER_REPO}/backend:${VERSION_TAG}
+    build: ./backend
+    target: production_image
+    ports:
+      - 8000:80
+    environment:
+    APP_VERSION: PRODUCTION
+    DB_HOST: ${MYSQL_DATABASE_HOST}
+    DB_PORT: ${MYSQL_DATABASE_PORT}
+    DB_DATABASE: ${MYSQL_DATABASE}
+    DB_USERNAME: ${MYSQL_USER}
+    DB_PASSWORD: ${MYSQL_PASSWORD}
+    APP_DEBUG: 'false'
+    volumes:
+      - ./backend/:/app
+    networks:
+      - internal
+
+  # database:
+  #   image: ${DOCKER_REPO}/database:${VERSION_TAG}
+  #   image: mariadb:10.2.14
+  #   command: --innodb-flush-method=O_DSYNC --innodb-use-native-aio=0 --log_bin=ON
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  #     MYSQL_USER: ${MYSQL_USER}
+  #     MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+  #     MYSQL_DATABASE: ${MYSQL_DATABASE}
+  #   ports:
+  #     - 3306:3306
+  #   volumes:
+  #     - db-data:/var/lib/mysql
+  #   networks:
+  #     - internal
+
+networks:
+  internal:
