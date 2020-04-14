@@ -2,7 +2,7 @@ version: "3.4"
 
 services:
   www:
-    container_name: AirQualityBackend
+    image: ${DOCKER_REPO}/www:${VERSION_TAG}
     build: ./entrypoint
     ports:
       - 80:80
@@ -17,19 +17,18 @@ services:
       - internal
 
   backend:
-    container_name: AirQualityBackend
-    build:
-    context: ./backend/
-    target: dev_image
+    image: ${DOCKER_REPO}/backend:${VERSION_TAG}
+    build: ./backend
+    target: production_image
     ports:
       - 8000:80
     environment:
-    APP_VERSION: DEVELOPMENT
-    DB_HOST: DB_HOST
-    DB_PORT: DB_PORT
-    DB_DATABASE: DB_DATABASE
-    DB_USERNAME: DB_USERNAME
-    DB_PASSWORD: DB_PASSWORD
+    APP_VERSION: PRODUCTION
+    DB_HOST: ${MYSQL_DATABASE_HOST}
+    DB_PORT: ${MYSQL_DATABASE_PORT}
+    DB_DATABASE: ${MYSQL_DATABASE}
+    DB_USERNAME: ${MYSQL_USER}
+    DB_PASSWORD: ${MYSQL_PASSWORD}
     APP_DEBUG: 'false'
     volumes:
       - ./backend/:/app
@@ -37,14 +36,14 @@ services:
       - internal
 
   # database:
-  #   container_name: AirQualityDB
+  #   image: ${DOCKER_REPO}/database:${VERSION_TAG}
   #   image: mariadb:10.2.14
   #   command: --innodb-flush-method=O_DSYNC --innodb-use-native-aio=0 --log_bin=ON
   #   environment:
-  #     MYSQL_ROOT_PASSWORD: root
-  #     MYSQL_USER: jeroen
-  #     MYSQL_PASSWORD: example
-  #     MYSQL_DATABASE: sync
+  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  #     MYSQL_USER: ${MYSQL_USER}
+  #     MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+  #     MYSQL_DATABASE: ${MYSQL_DATABASE}
   #   ports:
   #     - 3306:3306
   #   volumes:
